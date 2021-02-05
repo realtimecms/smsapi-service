@@ -52,10 +52,11 @@ definition.trigger({
     }
   },
   async execute({ smsId, phone, text}, context, emit) {
+    if(!smsId) smsId = app.generateUid()
    // return new Promise((resolve, reject) => {
       smsapi.message
           .sms()
-          .from('Eco')
+          .from(process.env.SMS_FROM || 'Eco')
           .dataEncoding('utf8')
           .to(phone)
           .maxParts(10)
@@ -99,6 +100,7 @@ definition.event({
     }
   },
   async execute({ smsId, phone, text, result }) {
+    if(!smsId) smsId = app.generateUid()
     await SentSms.create({ id: smsId, phone, text, result })
   }
 })
@@ -121,6 +123,7 @@ definition.event({
     }
   },
   async execute({ smsId, phone, text, error }) {
+    if(!smsId) smsId = app.generateUid()
     await SentSms.create({ id: smsId, phone, text, error })
   }
 })
