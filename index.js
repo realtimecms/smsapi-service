@@ -53,6 +53,15 @@ definition.trigger({
   },
   async execute({ smsId, phone, text}, context, emit) {
     if(!smsId) smsId = app.generateUid()
+    if(phone == "+4823232323") {
+      console.log("TEST SMS", text)
+      emit({
+        type: 'sent',
+        phone, text, smsId: 'test-' + smsId,
+        result: 'test-sms'
+      })
+      return "test-sms-sent"
+    }
    // return new Promise((resolve, reject) => {
       smsapi.message
           .sms()
