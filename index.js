@@ -1,6 +1,5 @@
-const App = require("@live-change/framework")
 const validators = require("../validation")
-const app = new App()
+const app = require("@live-change/framework").app()
 
 require('../../i18n/ejs-require.js')
 const i18n = require('../../i18n')
@@ -140,6 +139,11 @@ definition.event({
 module.exports = definition
 
 async function start () {
+  if(!app.dao) {
+    await require('@live-change/server').setupApp({})
+    await require('@live-change/elasticsearch-plugin')(app)
+  }
+
   process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason)
   })
